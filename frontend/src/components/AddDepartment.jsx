@@ -6,7 +6,7 @@ const AddDepartment = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://127.0.0.1:5000/api/departments", dept)
+    axios.post("http://localhost:5000/api/departments", dept)
       .then(() => alert("Department added!"));
   };
 

@@ -7,12 +7,12 @@ const ManageOrgDept = ({ goBack }) => {
   const [dept, setDept] = useState({ did: '', name: '', oid: '' });
 
   const handleOrgSubmit = async () => {
-    await axios.post("http://127.0.0.1:5000/api/organisations", org);
+    await axios.post("http://localhost:5000/api/organisations", org);
     alert("Organisation added!");
   };
 
   const handleDeptSubmit = async () => {
-    await axios.post("http://127.0.0.1:5000/api/departments", dept);
+    await axios.post("http://localhost:5000/api/departments", dept);
     alert("Department added!");
   };
 

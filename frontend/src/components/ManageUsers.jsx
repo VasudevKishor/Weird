@@ -9,15 +9,15 @@ const ManageUsers = ({ goBack }) => {
   const roles = ['admin', 'department_manager', 'project_manager', 'financial_analyst', 'employee'];
 
   const handleAdd = async () => {
-    await axios.post("http://127.0.0.1:5000/api/users", form);
+    await axios.post("http://localhost:5000/api/users", form);
     alert("User added.");
   };
 
   const handleDelete = async () => {
-    const res = await axios.get("http://127.0.0.1:5000/api/users");
+    const res = await axios.get("http://localhost:5000/api/users");
     const user = res.data.find(u => u.email === deleteEmail);
     if (user) {
-      await axios.delete(`http://127.0.0.1:5000/api/users/${user._id}`);
+      await axios.delete(`http://localhost:5000/api/users/${user._id}`);
       alert("User deleted.");
     } else {
       alert("User not found.");

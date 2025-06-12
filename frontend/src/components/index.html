@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+  <div class="container">
+    <h1>Employees</h1>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Add Employee</button>
+    <table class="table table-bordered" id="employeeTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Status</th>
+          <th>Salary</th>
+          <th>Infra Cost</th>
+          <th>FY</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Employee</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addEmployeeForm">
+            <input class="form-control mb-2" placeholder="Name" id="name" required>
+            <input class="form-control mb-2" placeholder="Department" id="department" required>
+            <input class="form-control mb-2" placeholder="Salary" id="salary" required type="number">
+            <input class="form-control mb-2" placeholder="Infra Cost" id="infra_cost" required type="number">
+            <input class="form-control mb-2" placeholder="FY (e.g., 2024)" id="fy" required>
+            <select class="form-select mb-2" id="active">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" onclick="saveEmployee()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

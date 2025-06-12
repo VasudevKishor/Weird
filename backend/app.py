@@ -72,7 +72,7 @@ def update_role(user_id):
 # Leaderboard
 @app.route('/api/leaderboard', methods=['GET'])
 def leaderboard():
-    top_users = list(db.users.find({"role": "employee"}).sort("working_hours", -1).limit(10))
+    top_users = list(db.users.find({"role": "employee"}).sort("working_hours", -1).limit(25))
     for user in top_users:
         user["_id"] = str(user["_id"])
     return jsonify(top_users)

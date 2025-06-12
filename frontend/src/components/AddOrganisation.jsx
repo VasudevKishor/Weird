@@ -6,7 +6,7 @@ const AddOrganisation = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://127.0.0.1:5000/api/organisations", org)
+    axios.post("http://localhost:5000/api/organisations", org)
       .then(() => alert("Organisation added!"));
   };
 

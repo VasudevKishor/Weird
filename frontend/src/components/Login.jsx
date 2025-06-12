@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './styles/Login.css'; // Make sure this path is correct
+import './Login.css'; // Make sure this path is correct
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -17,19 +17,21 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await axios.post('http://127.0.0.1:5000/api/login', credentials);
+      const res = await axios.post('http://localhost:5000/api/login', credentials);
       const { user, token } = res.data;
 
-      if (user.role === 'Admin') {
+      if (user.role === 'admin') {
         navigate('/admin-dashboard');
-      } else if (user.role === 'Employee') {
+      } else if (user.role === 'employee') {
         alert('Employee logged in');
-      } else if (user.role === 'Project Manager') {
+      } else if (user.role === 'project_manager') {
         alert('Project Manager logged in');
-      } else if (user.role === 'Department Manager') {
+      } else if (user.role === 'department_manager') {
         alert('Department Manager logged in');
-      } else if (user.role === 'Financial Analyst') {
+      } else if (user.role === 'financial_analyst') {
         alert('Financial Analyst logged in');
+      }else if (user.role === 'employee'){
+        alert('Employee logged in');
       } else {
         alert('Unknown role');
       }
