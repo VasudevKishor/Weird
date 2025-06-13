@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ActivityIcon, UsersIcon } from "lucide-react";
 import axios from "axios";
 import {
   UserPlus,
@@ -56,19 +57,18 @@ const RecentActivities = () => {
         <p>No recent activity yet.</p>
       )}
 
-      <ul>
-        {activities.map((activity, index) => (
-          <li key={index} className="activity">
-            {iconMap[activity.type] || <LayoutDashboard className="icon" />}
-            <div className="content">
-              <p className="title">{activity.title}</p>
-              <p className="timestamp">
-                {new Date(activity.timestamp).toLocaleString()}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
+<ul className="custom-list">
+  {activities.map((activity, index) => (
+    <li key={index} className="activity">
+      <div className="content">
+        <p className="timestamp">
+          {new Date(activity.timestamp).toLocaleString()}
+        </p>
+      </div>
+    </li>
+  ))}
+</ul>
+
     </div>
   );
 };

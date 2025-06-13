@@ -16,6 +16,13 @@
     gap: 30px;
 }
 
+.dashboard-group {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+}
+
 .dashboard-header {
     background: #ffffff;
     padding: 0px;
@@ -43,6 +50,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width:75%;
+  height: fit-content;
 }
 
 .dashboard-welcome h3 {
@@ -118,4 +127,5 @@
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  max-height: 72vh; /* Set your preferred max height */
 }

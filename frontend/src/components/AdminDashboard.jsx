@@ -13,13 +13,14 @@ const AdminDashboard = () => {
     <div className="dashboard-header">
       <Navbar />
     </div>
-
+<div className="dashboard-group">
     <div className="dashboard-welcome">
       <DashboardSummary />
     </div>
 
     <div className="dashboard-directory">
       <RecentActivities />
+    </div>
     </div>
   </div>
 </div>

@@ -2,10 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from datetime import datetime
+from datetime import datetime,timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from dotenv import load_dotenv
+from pytz import timezone as pytz_timezone
+IST = pytz_timezone("Asia/Kolkata")
 
 # Load environment variables
 load_dotenv()
@@ -402,6 +404,71 @@ def update_employee(eid):
     emp["_id"] = str(emp["_id"])
     emp.pop("password", None)
     return jsonify(emp), 200
+
+# Recent Activities
+
+def parse_timestamp(ts):
+    if isinstance(ts, datetime):
+        if ts.tzinfo is None:
+            return ts.replace(tzinfo=timezone.utc)
+        return ts
+    try:
+        dt = datetime.fromisoformat(str(ts))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    except Exception:
+        return datetime.now(timezone.utc)
+    if isinstance(ts, datetime):
+        return ts
+    try:
+        return datetime.fromisoformat(str(ts))
+    except ception:
+        return datetime.now(timezone.utc)
+def log_activity(type_, name, action):
+    db.activity_log.insert_one({
+        "type": type_,
+        "name": name,
+        "action": action,  # "created", "updated", "deleted"
+        "timestamp": datetime.utcnow()
+    })
+
+
+
+@app.route('/api/recent-activities')
+def get_recent_activities():
+    activities = []
+
+    for e in db.employees.find().limit(10):
+        name = f"{e.get('fname', '')} {e.get('lname', '')}".strip()
+        activities.append({
+            "type": "Employee",
+            "name": name,
+            "timestamp": parse_timestamp(e.get("createdAt"))
+        })
+
+    for o in db.organisations.find().limit(10):
+        activities.append({
+            "type": "Organisation",
+            "name": o.get("name"),
+            "timestamp": parse_timestamp(o.get("createdAt"))
+        })
+
+    for p in db.projects.find().limit(10):
+        activities.append({
+            "type": "Project",
+            "name": p.get("name"),
+            "timestamp": parse_timestamp(p.get("createdAt"))
+        })
+
+    activities.sort(key=lambda x: x["timestamp"], reverse=True)
+
+    return jsonify(activities)
+    activities.sort(key=lambda x: x["timestamp"], reverse=True)
+
+    return jsonify(activities)
+
+
 
 # ------------------ MAIN ------------------
 
