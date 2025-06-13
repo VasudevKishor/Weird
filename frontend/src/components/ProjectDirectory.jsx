@@ -3,6 +3,7 @@ import './EmployeeDirectory.css';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import ModalWrapper from './ModalWrapper';
+import { useNavigate } from 'react-router-dom'; // ✅ NEW import
 
 const ProjectDirectory = () => {
   const [projects, setProjects] = useState([]);
@@ -17,6 +18,8 @@ const ProjectDirectory = () => {
     budget: ''
   });
   const [editId, setEditId] = useState(null);
+
+  const navigate = useNavigate(); // ✅ NEW
 
   useEffect(() => {
     fetchProjects();
@@ -96,6 +99,17 @@ const ProjectDirectory = () => {
     }
   };
 
+  // ✅ NEW: Navigate to assignees page with state
+  const handleAssigneesClick = (project) => {
+    navigate(`/projects/${project._id}/assignees`, {
+      state: {
+        projectId: project._id,
+        name: project.name,
+        budget: project.budget
+      }
+    });
+  };
+
   const filteredProjects = projects.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -140,6 +154,13 @@ const ProjectDirectory = () => {
               <td>
                 <FaEdit className="icon edit-icon" onClick={() => openEditModal(proj)} />
                 <FaTrash className="icon delete-icon" onClick={() => handleDelete(proj._id)} />
+                <button
+                  className="assignees-btn"
+                  onClick={() => handleAssigneesClick(proj)}
+                  title="Manage Assignees"
+                >
+                  Assignees
+                </button>
               </td>
             </tr>
           ))}

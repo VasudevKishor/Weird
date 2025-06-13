@@ -468,6 +468,36 @@ def get_recent_activities():
 
     return jsonify(activities)
 
+@app.route('/api/projects/<project_id>/assignees', methods=['GET'])
+def get_assignees(project_id):
+    proj = db.projects.find_one({"_id": ObjectId(project_id)})
+    if not proj:
+        return jsonify({"error": "Project not found"}), 404
+    eids = proj.get("assignees", [])
+    emps = list(db.users.find({"eid": {"$in": eids}}))
+    for emp in emps:
+        emp["_id"] = str(emp["_id"])
+        emp.pop("password", None)
+    return jsonify(emps), 200
+
+@app.route('/api/projects/<project_id>/assignees', methods=['POST'])
+def add_assignee(project_id):
+    data = request.json
+    eid = data.get("eid")
+    if not eid:
+        return jsonify({"error": "EID required"}), 400
+    proj = db.projects.find_one({"_id": ObjectId(project_id)})
+    if not proj:
+        return jsonify({"error": "Project not found"}), 404
+    if eid in proj.get("assignees", []):
+        return jsonify({"error": "Employee already assigned"}), 409
+    db.projects.update_one({"_id": ObjectId(project_id)}, {"$push": {"assignees": eid}})
+    return jsonify({"message": "Assignee added"}), 200
+
+@app.route('/api/projects/<project_id>/assignees/<eid>', methods=['DELETE'])
+def remove_assignee(project_id, eid):
+    db.projects.update_one({"_id": ObjectId(project_id)}, {"$pull": {"assignees": eid}})
+    return jsonify({"message": "Assignee removed"}), 200
 
 
 # ------------------ MAIN ------------------
