@@ -3,6 +3,8 @@ import './EmployeeDirectory.css';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import ModalWrapper from './ModalWrapper';
+import { useNavigate } from 'react-router-dom';
+
 
 const ProjectDirectory = () => {
   const [projects, setProjects] = useState([]);
@@ -17,6 +19,9 @@ const ProjectDirectory = () => {
     budget: ''
   });
   const [editId, setEditId] = useState(null);
+
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProjects();
@@ -53,7 +58,7 @@ const ProjectDirectory = () => {
       endDate: project.endDate ? project.endDate.substring(0, 10) : '',
       budget: project.budget || ''
     });
-    setEditId(project._id);
+    setEditId(project.id);
     setShowModal(true);
   };
 
@@ -74,14 +79,25 @@ const ProjectDirectory = () => {
         alert('Project added successfully');
       } else {
         const res = await axios.put(`http://localhost:5000/api/projects/${editId}`, currentProject);
-        setProjects(prev => prev.map(p => p._id === editId ? res.data : p));
+        setProjects(prev => prev.map(p => p.id === editId ? res.data : p));
         alert('Project updated successfully');
       }
       setShowModal(false);
+      fetchProjects();
     } catch (err) {
       console.error('Error submitting project', err);
       alert('Error submitting project. Check console.');
     }
+  };
+
+  const handleAssigneesClick = (project) => {
+    navigate(`/projects/${project.id}/assignees`, {
+      state: {
+        projectId: project.id,
+        name: project.name,
+        budget: project.budget,
+      },
+    });
   };
 
   const handleDelete = async (id) => {
@@ -90,15 +106,18 @@ const ProjectDirectory = () => {
       await axios.delete(`http://localhost:5000/api/projects/${id}`);
       setProjects(prev => prev.filter(p => p._id !== id));
       alert('Project deleted');
+      fetchProjects();
     } catch (err) {
       console.error('Error deleting project', err);
       alert('Error deleting project. Check console.');
     }
   };
 
+
   const filteredProjects = projects.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase())
+    (p.name || '').toLowerCase().includes(search.toLowerCase())
   );
+
 
   return (
     <div className="employee-table-container">
@@ -131,7 +150,7 @@ const ProjectDirectory = () => {
         </thead>
         <tbody>
           {filteredProjects.map(proj => (
-            <tr key={proj._id}>
+            <tr key={proj.id}>
               <td>{proj.name}</td>
               <td>{proj.departmentId}</td>
               <td>{proj.startDate ? proj.startDate.substring(0, 10) : '—'}</td>
@@ -139,7 +158,14 @@ const ProjectDirectory = () => {
               <td>{proj.budget}</td>
               <td>
                 <FaEdit className="icon edit-icon" onClick={() => openEditModal(proj)} />
-                <FaTrash className="icon delete-icon" onClick={() => handleDelete(proj._id)} />
+                <FaTrash className="icon delete-icon" onClick={() => handleDelete(proj.id)} />
+                <button
+                  className="assignees-btn"
+                  onClick={() => handleAssigneesClick(proj)}
+                  title="Manage Assignees"
+                >
+                  Assignees
+                </button>
               </td>
             </tr>
           ))}
@@ -152,9 +178,11 @@ const ProjectDirectory = () => {
       </table>
 
       {showModal && (
-        <ModalWrapper onClose={() => setShowModal(false)}>
+        <ModalWrapper
+          onClose={() => setShowModal(false)}
+          title={formMode === 'add' ? 'Add Project' : 'Edit Project'}
+        >
           <form className="modal-form" onSubmit={handleSubmit}>
-            <h3>{formMode === 'add' ? 'Add Project' : 'Edit Project'}</h3>
             <input
               name="name"
               placeholder="Project Name"
@@ -167,24 +195,21 @@ const ProjectDirectory = () => {
               value={currentProject.departmentId}
               onChange={handleInputChange}
             />
-            <label>
-              Start Date
-              <input
-                type="date"
-                name="startDate"
-                value={currentProject.startDate}
-                onChange={handleInputChange}
-              />
-            </label>
-            <label>
-              End Date
-              <input
-                type="date"
-                name="endDate"
-                value={currentProject.endDate}
-                onChange={handleInputChange}
-              />
-            </label>
+            <label htmlFor="startDate">Start Date</label>
+            <input
+              type="date"
+              id="startDate"
+              name="startDate"
+              value={currentProject.startDate}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="EndDate">End Date</label>
+            <input
+              type="date"
+              name="endDate"
+              value={currentProject.endDate}
+              onChange={handleInputChange}
+            />
             <input
               name="budget"
               placeholder="Budget"
@@ -195,6 +220,7 @@ const ProjectDirectory = () => {
           </form>
         </ModalWrapper>
       )}
+
     </div>
   );
 };

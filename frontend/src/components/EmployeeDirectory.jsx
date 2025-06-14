@@ -14,7 +14,13 @@ const EmployeeDirectory = () => {
   const [form, setForm] = useState(initialForm);
   const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(() => fetchEmployees(), []);
+  useEffect(() => {
+    const load = async () => {
+      await fetchEmployees();
+    };
+    load();
+  }, []);
+
 
   const fetchEmployees = async () => {
     try {
@@ -45,7 +51,6 @@ const EmployeeDirectory = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    // Validate
     const { eid, fname, lname, email, did, password } = form;
     if (!eid || !fname || !lname || !email || !did || (formMode === 'add' && !password)) {
       return alert('All fields required, and password for new employee');
@@ -53,8 +58,10 @@ const EmployeeDirectory = () => {
     try {
       if (formMode === 'add') {
         await axios.post('http://localhost:5000/api/employees', form);
+        alert('Emplaoyee added successfully');
       } else {
         await axios.put(`http://localhost:5000/api/employees/${selectedId}`, form);
+        alert('Emplaoyee updated successfully');
       }
       close();
       fetchEmployees();
@@ -64,10 +71,10 @@ const EmployeeDirectory = () => {
     }
   };
 
-  const handleDelete = async _id => {
+  const handleDelete = async (id) => {
     if (!window.confirm('Delete employee?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/users/${_id}`);
+      await axios.delete(`http://localhost:5000/api/users/${id}`);
       fetchEmployees();
     } catch (e) {
       console.error('Delete error', e.response?.data || e);
@@ -79,13 +86,20 @@ const EmployeeDirectory = () => {
     `${emp.fname} ${emp.lname}`.toLowerCase().includes(search.toLowerCase())
   );
 
+
   return (
     <div className="employee-table-container">
       <div className="table-header">
         <h2>Employee Directory</h2>
         <div className="controls">
-          <input placeholder="Search employee..." value={search} onChange={e => setSearch(e.target.value)} />
-          <button onClick={openAdd}><FaPlus /> Add Employee</button>
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search employee..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button className="add-btn" onClick={openAdd}><FaPlus /> Add Employee</button>
         </div>
       </div>
       <table className="employee-table">
@@ -96,14 +110,14 @@ const EmployeeDirectory = () => {
         </thead>
         <tbody>
           {filtered.map(emp => (
-            <tr key={emp._id}>
+            <tr key={emp._id || emp.eid}>
               <td>{emp.eid}</td>
               <td>{emp.fname} {emp.lname}</td>
               <td>{emp.email}</td>
               <td>{emp.did}</td>
               <td>
                 <FaEdit onClick={() => openEdit(emp)} className="icon edit-icon" />
-                <FaTrash onClick={() => handleDelete(emp._id)} className="icon delete-icon" />
+                <FaTrash onClick={() => handleDelete(emp.id || emp._id)} className="icon delete-icon" />
               </td>
             </tr>
           ))}
@@ -111,19 +125,54 @@ const EmployeeDirectory = () => {
             <tr><td colSpan="5">No employees found.</td></tr>
           )}
         </tbody>
+
       </table>
 
       {showModal && (
-        <ModalWrapper onClose={close}>
+        <ModalWrapper
+          onClose={close}
+          title={formMode === 'add' ? 'Add Employee' : 'Edit Employee'}
+        >
           <form className="modal-form" onSubmit={handleSubmit}>
-            <h3>{formMode === 'add' ? 'Add Employee' : 'Edit Employee'}</h3>
-            <input name="eid" placeholder="Employee ID" value={form.eid} onChange={handleChange} disabled={formMode === 'edit'} />
-            <input name="fname" placeholder="First Name" value={form.fname} onChange={handleChange} />
-            <input name="lname" placeholder="Last Name" value={form.lname} onChange={handleChange} />
-            <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-            <input name="did" placeholder="Department ID" value={form.did} onChange={handleChange} />
+            <input
+              name="eid"
+              placeholder="Employee ID"
+              value={form.eid}
+              onChange={handleChange}
+              disabled={formMode === 'edit'}
+            />
+            <input
+              name="fname"
+              placeholder="First Name"
+              value={form.fname}
+              onChange={handleChange}
+            />
+            <input
+              name="lname"
+              placeholder="Last Name"
+              value={form.lname}
+              onChange={handleChange}
+            />
+            <input
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+            />
+            <input
+              name="did"
+              placeholder="Department ID"
+              value={form.did}
+              onChange={handleChange}
+            />
             {formMode === 'add' && (
-              <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} />
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={form.password}
+                onChange={handleChange}
+              />
             )}
             <button type="submit">{formMode === 'add' ? 'Add' : 'Update'}</button>
           </form>

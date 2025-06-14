@@ -24,14 +24,19 @@ const Login = () => {
         navigate('/admin-dashboard');
       } else if (user.role === 'employee') {
         alert('Employee logged in');
+        navigate('/emp-homepage');
       } else if (user.role === 'project_manager') {
         alert('Project Manager logged in');
+        navigate('/emp-homepage');
       } else if (user.role === 'department_manager') {
         alert('Department Manager logged in');
+        navigate('/emp-homepage');
       } else if (user.role === 'financial_analyst') {
         alert('Financial Analyst logged in');
+        navigate('/emp-homepage');
       }else if (user.role === 'employee'){
         alert('Employee logged in');
+        navigate('/emp-homepage');
       } else {
         alert('Unknown role');
       }
