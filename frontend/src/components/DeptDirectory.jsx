@@ -148,9 +148,11 @@ const DepartmentDirectory = () => {
       </table>
 
       {showModal && (
-        <ModalWrapper onClose={() => setShowModal(false)}>
+        <ModalWrapper
+          title={formMode === 'add' ? 'Add Department' : 'Edit Department'}
+          onClose={() => setShowModal(false)}
+        >
           <form className="modal-form" onSubmit={handleSubmit}>
-            <h3>{formMode === 'add' ? 'Add Department' : 'Edit Department'}</h3>
             <input
               name="did"
               placeholder="Department ID"
@@ -180,6 +182,7 @@ const DepartmentDirectory = () => {
           </form>
         </ModalWrapper>
       )}
+
     </div>
   );
 };

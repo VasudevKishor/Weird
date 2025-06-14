@@ -15,7 +15,7 @@ const OrganisationDashboard = () => {
     </div>
 
         <div className="dashboard-directory">
-          <OrganisationDirectory /> {/* updated component */}
+          <OrganisationDirectory /> 
         </div>
       </div>
     </div>

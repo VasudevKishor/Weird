@@ -5,7 +5,6 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminSignup from './components/AdminSignup';
 import EmployeeDashboard from './components/EmployeeDashBoard';
 import EmployeeDirectory from './components/EmployeeDirectory';
-import AddEmployee from './components/AddEmployee'; // ✅ NEW
 import ProjectDashboard from './components/ProjectDashboard';
 import ProjectDirectory from './components/ProjectDirectory';
 import DepartmentDirectory from './components/DeptDirectory';
@@ -15,6 +14,10 @@ import OrganisationDirectory from './components/OrganisationDirectory';
 import Navbar from './components/Navbar';
 import DashboardSummary from './components/DashboardSummary';
 import RecentActivities from './components/RecentActivities';
+import FXRateChart from './components/FXRateChart';
+import BudgetChart from './components/BudgetChart';
+import EmployeeHomePage from './components/EmployeeHomePage';
+import ProjectAssignees from './components/ProjectAssignees';
 
 function App() {
   return (
@@ -24,7 +27,6 @@ function App() {
       <Route path="/admin-signup" element={<AdminSignup />} />
       <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
       <Route path="/employee-directory" element={<EmployeeDirectory />} />
-      <Route path="/add-employee" element={<AddEmployee />} /> {/* ✅ NEW ROUTE */}
       <Route path="/project-dashboard" element={<ProjectDashboard />} />
       <Route path="/project-directory" element={<ProjectDirectory />} />
       <Route path="/dept-dashboard" element={<DeptDashboard />} />
@@ -34,6 +36,10 @@ function App() {
       <Route path="/navbar" element={<Navbar />} />
       <Route path="/dashboard-summary" element={<DashboardSummary />} />
       <Route path="/recent-activities" element={<RecentActivities />} />
+      <Route path="/fx-rate-chart" element={<FXRateChart />} />
+      <Route path="/budget-chart" element={<BudgetChart />} />
+      <Route path="/emp-homepage" element={<EmployeeHomePage />} />
+      <Route path="/projects/:id/assignees" element={<ProjectAssignees />} />
     </Routes>
   );
 }

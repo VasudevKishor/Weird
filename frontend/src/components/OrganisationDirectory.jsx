@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import './EmployeeDirectory.css';
 import axios from 'axios';
-import ModalWrapper from './ModalWrapper'; // update path as per your project
-
+import ModalWrapper from './ModalWrapper';
 
 const OrganisationDirectory = () => {
   const [organisations, setOrganisations] = useState([]);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newOrg, setNewOrg] = useState({ name: '', oid: '' });
+  const [formMode, setFormMode] = useState('add');
+  const [editOid, setEditOid] = useState(null);
+  const [currentOrganisation, setCurrentOrganisation] = useState({ name: '', oid: '' });
 
   useEffect(() => {
     fetchOrganisations();
@@ -23,6 +25,20 @@ const OrganisationDirectory = () => {
     }
   };
 
+  const openAddModal = () => {
+    setFormMode('add');
+    setCurrentOrganisation({ name: '', oid: '' });
+    setEditOid(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (org) => {
+    setFormMode('edit');
+    setCurrentOrganisation({ name: org.name || '', oid: org.oid });
+    setEditOid(org.oid);
+    setIsModalOpen(true);
+  };
+
   const handleDelete = async (oid) => {
     if (!window.confirm('Are you sure you want to delete this organisation?')) return;
     try {
@@ -35,27 +51,38 @@ const OrganisationDirectory = () => {
     }
   };
 
-  const handleEdit = async (oid) => {
-    const org = organisations.find(o => o.oid === oid);
-    if (!org) return alert("Organisation not found");
-
-    const name = prompt("Edit organisation name", org.name);
-    if (!name) {
-      alert("Name cannot be empty.");
+  const handleModalSubmit = async (e) => {
+    e.preventDefault();
+    const { name, oid } = currentOrganisation;
+    if (!name || !oid) {
+      alert("All fields are required.");
       return;
     }
 
     try {
-      const res = await axios.put(`http://localhost:5000/api/organisations/${oid}`, { name });
-      setOrganisations(prev =>
-        prev.map(o => (o.oid === oid ? res.data : o))
-      );
-      alert("Organisation updated successfully");
+      if (formMode === 'add') {
+        const res = await axios.post("http://localhost:5000/api/organisations", currentOrganisation);
+        setOrganisations(prev => [...prev, res.data]);
+        alert("Organisation added successfully!");
+      } else if (formMode === 'edit' && editOid) {
+        const res = await axios.put(`http://localhost:5000/api/organisations/${editOid}`, { name });
+        setOrganisations(prev => prev.map(o => o.oid === editOid ? res.data : o));
+        alert("Organisation updated successfully!");
+      }
+
+      setIsModalOpen(false);
+      setCurrentOrganisation({ name: '', oid: '' });
+      setEditOid(null);
+      fetchOrganisations();
     } catch (err) {
-      console.error("Update error", err);
-      alert("Error updating organisation");
+      console.error("Modal submit error", err);
+      alert(`Error ${formMode === 'add' ? 'adding' : 'updating'} organisation`);
     }
   };
+
+  const filteredOrganisations = organisations.filter(org =>
+    (org.name || '').toLowerCase().includes(search.toLowerCase())
+  );
 
   const convertToIST = (utcDateStr) => {
     if (!utcDateStr) return '—';
@@ -72,29 +99,6 @@ const OrganisationDirectory = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
-  const handleModalSubmit = async (e) => {
-    e.preventDefault();
-    if (!newOrg.name || !newOrg.oid) {
-      alert("All fields are required.");
-      return;
-    }
-
-    try {
-      const res = await axios.post("http://localhost:5000/api/organisations", newOrg);
-      setOrganisations(prev => [...prev, res.data]);
-      alert("Organisation added successfully!");
-      setNewOrg({ name: '', oid: '' });
-      setIsModalOpen(false);
-    } catch (err) {
-      console.error("Add error", err);
-      alert("Error adding organisation");
-    }
-  };
-
-  const filteredOrganisations = organisations.filter(org =>
-    (org.name || '').toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <div className="employee-table-container">
       <div className="table-header">
@@ -107,7 +111,7 @@ const OrganisationDirectory = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+          <button className="add-btn" onClick={openAddModal}>
             <FaPlus /> Add Organisation
           </button>
         </div>
@@ -129,7 +133,7 @@ const OrganisationDirectory = () => {
               <td>{org.name}</td>
               <td>{convertToIST(org.createdAt)}</td>
               <td>
-                <FaEdit className="icon edit-icon" onClick={() => handleEdit(org.oid)} />
+                <FaEdit className="icon edit-icon" onClick={() => openEditModal(org)} />
                 <FaTrash className="icon delete-icon" onClick={() => handleDelete(org.oid)} />
               </td>
             </tr>
@@ -143,22 +147,22 @@ const OrganisationDirectory = () => {
       </table>
 
       {isModalOpen && (
-        <ModalWrapper onClose={() => setIsModalOpen(false)}>
+        <ModalWrapper title={formMode === 'add' ? 'Add Organisation' : 'Edit Organisation'} onClose={() => setIsModalOpen(false)}>
           <form onSubmit={handleModalSubmit} className="modal-form">
-            <h3>Add Organisation</h3>
             <input
               type="text"
               placeholder="Organisation ID"
-              value={newOrg.oid}
-              onChange={(e) => setNewOrg({ ...newOrg, oid: e.target.value })}
+              value={currentOrganisation.oid}
+              onChange={(e) => setCurrentOrganisation({ ...currentOrganisation, oid: e.target.value })}
+              disabled={formMode === 'edit'}
             />
             <input
               type="text"
               placeholder="Organisation Name"
-              value={newOrg.name}
-              onChange={(e) => setNewOrg({ ...newOrg, name: e.target.value })}
+              value={currentOrganisation.name}
+              onChange={(e) => setCurrentOrganisation({ ...currentOrganisation, name: e.target.value })}
             />
-            <button type="submit">Add</button>
+            <button type="submit">{formMode === 'add' ? 'Add' : 'Update'}</button>
           </form>
         </ModalWrapper>
       )}
