@@ -5,7 +5,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-left">
-                <div className="logo"></div>
+                <a href="/admin-dashboard"><div className="logo"></div></a>
                 <ul className="nav-links">
                     <li><a href="/employee-dashboard">Manage Users</a></li>
                     <li><a href="/org-dashboard">Manage Organisation</a></li>
@@ -14,7 +14,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="profile-icon">
-                <li><a href="/admin-dashboard"><FaUserCircle /></a></li>
+                <FaUserCircle />
             </div>
         </nav>
     );

@@ -1,0 +1,116 @@
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.assignee-page h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-bar-assignee {
+  width: 96%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.search-bar-assignee:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-dropdown li {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-dropdown li:hover {
+  background: #f1f1f1;
+}
+
+.assignee-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.assignee-table th,
+.assignee-table td {
+  border: 1px solid #f0f0f0;
+  padding: 12px;
+  text-align: left;
+}
+
+.assignee-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.assignee-table tr:hover {
+  background: #f9f9f9;
+}
+
+.assignee-table button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.assignee-table button:hover {
+  background: #c0392b;
+}
+
+.close-btn {
+  margin-top: 20px;
+  padding: 10px 16px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  float: right;
+  transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #5a6268;
+}
