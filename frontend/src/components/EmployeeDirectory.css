@@ -94,3 +94,16 @@
   color: #888;
   padding: 1rem;
 }
+
+.assignees-btn {
+  background-color: var(--accent-color);
+  color: var(--white);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

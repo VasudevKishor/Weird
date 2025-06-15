@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './styles/ManageUsers.css';
 
+const API = process.env.REACT_APP_API_BASE_URL;
+
 const ManageUsers = () => {
   const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ const ManageUsers = () => {
 
   const handleAdd = async () => {
     try {
-      await axios.post("http://127.0.0.1:5000/api/users", form);
+      await axios.post(`${API}/api/users`, form);
       alert("User added.");
       setForm({ name: '', email: '', password: '', role: 'employee' });
     } catch (err) {
@@ -30,10 +32,10 @@ const ManageUsers = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:5000/api/users");
+      const res = await axios.get(`${API}/api/users`);
       const user = res.data.find(u => u.email === deleteEmail);
       if (user) {
-        await axios.delete(`http://127.0.0.1:5000/api/users/${user._id}`);
+        await axios.delete(`${API}/api/users/${user._id}`);
         alert("User deleted.");
         setDeleteEmail('');
       } else {

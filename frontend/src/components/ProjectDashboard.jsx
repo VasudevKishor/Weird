@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import ProjectDirectory from './ProjectDirectory';
 import Navbar from './Navbar';
 import './styles/Dashboard.css';
+
+const API = process.env.REACT_APP_API_BASE_URL;
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
 

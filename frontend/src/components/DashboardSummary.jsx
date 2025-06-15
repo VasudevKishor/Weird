@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaBuilding, FaUsers, FaProjectDiagram, FaSitemap, FaMoneyBillWave } from "react-icons/fa";
 import "./DashboardSummary.css";
+const API = process.env.REACT_APP_API_BASE_URL;
+
 
 const DashboardSummary = () => {
   const [stats, setStats] = useState({
@@ -16,10 +18,10 @@ const DashboardSummary = () => {
     const fetchData = async () => {
       try {
         const [projectsRes, employeesRes, orgsRes, deptsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/projects"),
-          axios.get("http://localhost:5000/api/employees"),
-          axios.get("http://localhost:5000/api/organisations"),
-          axios.get("http://localhost:5000/api/departments"),
+          axios.get(`${API}/api/projects`),
+          axios.get(`${API}/api/employees`),
+          axios.get(`${API}/api/organisations`),
+          axios.get(`${API}/api/departments`),
         ]);
 
         const totalBudget = projectsRes.data.reduce((sum, p) => sum + (parseFloat(p.budget) || 0), 0);

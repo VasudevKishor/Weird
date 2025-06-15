@@ -3,6 +3,8 @@ import './EmployeeDirectory.css';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import ModalWrapper from './ModalWrapper';
+const API = process.env.REACT_APP_API_BASE_URL;
+
 
 const DepartmentDirectory = () => {
   const [departments, setDepartments] = useState([]);
@@ -23,7 +25,7 @@ const DepartmentDirectory = () => {
 
   const fetchDepartments = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/departments');
+      const res = await axios.get(`${API}/api/departments`);
       setDepartments(res.data);
     } catch (err) {
       console.error('Failed to fetch departments', err);
@@ -34,7 +36,7 @@ const DepartmentDirectory = () => {
     if (!window.confirm("Are you sure you want to delete this department?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/departments/${did}`);
+      await axios.delete(`${API}/api/departments/${did}`);
       setDepartments(prev => prev.filter(dept => dept.did !== did));
     } catch (err) {
       console.error("Failed to delete department", err);
@@ -74,24 +76,45 @@ const DepartmentDirectory = () => {
 
     try {
       if (formMode === 'add') {
-        const res = await axios.post('http://localhost:5000/api/departments', currentDept);
+        const res = await axios.post(`${API}/api/departments`, currentDept);
         setDepartments(prev => [...prev, { ...currentDept, _id: res.data._id || Math.random().toString() }]);
         alert("Department added.");
+        fetchDepartments(); // Refresh list after adding
       } else {
         const res = await axios.put(
-          `http://localhost:5000/api/departments/${editId}`,
+          `${API}/api/departments/${editId}`,
           currentDept
         );
         setDepartments(prev =>
           prev.map(dept => dept.did === editId ? { ...dept, ...currentDept } : dept)
         );
         alert("Department updated.");
+        fetchDepartments(); // Refresh list after updating
       }
       setShowModal(false);
     } catch (err) {
       console.error("Failed to submit department", err);
       alert("Error submitting department.");
     }
+  };
+
+  const convertToIST = (isoString) => {
+    if (!isoString) return '-';
+    const utcDate = new Date(isoString);
+
+    const istOffset = 5.5 * 60;
+    const istTime = new Date(utcDate.getTime() + istOffset * 60 * 1000);
+
+    return istTime.toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour12: true,
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit'
+    });
   };
 
   const filteredDepartments = departments.filter(d =>
@@ -123,6 +146,8 @@ const DepartmentDirectory = () => {
             <th>Name</th>
             <th>Organisation ID</th>
             <th>Manager ID</th>
+            <th>Created At (IST)</th>
+            <th>Updated At (IST)</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -133,6 +158,8 @@ const DepartmentDirectory = () => {
               <td>{dept.name}</td>
               <td>{dept.oid}</td>
               <td>{dept.managerId || '—'}</td>
+              <td>{convertToIST(dept.createdAt)}</td>
+              <td>{convertToIST(dept.updatedAt)}</td>
               <td>
                 <FaEdit className="icon edit-icon" onClick={() => openEditModal(dept)} />
                 <FaTrash className="icon delete-icon" onClick={() => handleDelete(dept.did)} />
@@ -148,9 +175,11 @@ const DepartmentDirectory = () => {
       </table>
 
       {showModal && (
-        <ModalWrapper onClose={() => setShowModal(false)}>
+        <ModalWrapper
+          title={formMode === 'add' ? 'Add Department' : 'Edit Department'}
+          onClose={() => setShowModal(false)}
+        >
           <form className="modal-form" onSubmit={handleSubmit}>
-            <h3>{formMode === 'add' ? 'Add Department' : 'Edit Department'}</h3>
             <input
               name="did"
               placeholder="Department ID"
@@ -180,6 +209,7 @@ const DepartmentDirectory = () => {
           </form>
         </ModalWrapper>
       )}
+
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Make sure this path is correct
+const API = process.env.REACT_APP_API_BASE_URL;
+
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -17,7 +19,7 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/login', credentials);
+      const res = await axios.post(`${API}/api/login`, credentials);
       const { user, token } = res.data;
 
       if (user.role === 'admin' || user.role === 'Admin') {

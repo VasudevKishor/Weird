@@ -12,6 +12,8 @@ import {
 
 import "./RecentActivities.css"; // optional external styling
 
+const API = process.env.REACT_APP_API_BASE_URL;
+
 const iconMap = {
   Employee: <UserPlus className="icon" />,
   Department: <Building2 className="icon" />,
@@ -26,7 +28,7 @@ const RecentActivities = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/recent-activities")
+      .get(`${API}/api/recent-activities`)
       .then((res) => {
         setActivities(res.data);
         setLoading(false);
