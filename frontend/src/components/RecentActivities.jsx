@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIcon, UsersIcon } from "lucide-react";
 import axios from "axios";
 import {
   UserPlus,
@@ -8,15 +7,17 @@ import {
   LayoutDashboard,
   Loader2,
   AlertTriangle,
+  ActivityIcon
 } from "lucide-react";
+import "./RecentActivities.css"; // Make sure this file exists or create styles
 
-import "./RecentActivities.css"; // optional external styling
+const API = process.env.REACT_APP_API_BASE_URL;
 
 const iconMap = {
   Employee: <UserPlus className="icon" />,
   Department: <Building2 className="icon" />,
   Organisation: <Briefcase className="icon" />,
-  Project: <LayoutDashboard className="icon" />,
+  Project: <LayoutDashboard className="icon" />
 };
 
 const RecentActivities = () => {
@@ -25,16 +26,22 @@ const RecentActivities = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/recent-activities")
-      .then((res) => {
+    const fetchActivities = async () => {
+      try {
+        const res = await axios.get(`${API}/api/recent-activities`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
         setActivities(res.data);
         setLoading(false);
-      })
-      .catch((err) => {
-        setError("Failed to load activities.");
+      } catch (err) {
+        setError("Failed to load recent activities.");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchActivities();
   }, []);
 
   return (
@@ -57,18 +64,23 @@ const RecentActivities = () => {
         <p>No recent activity yet.</p>
       )}
 
-<ul className="custom-list">
-  {activities.map((activity, index) => (
-    <li key={index} className="activity">
-      <div className="content">
-        <p className="timestamp">
-          {new Date(activity.timestamp).toLocaleString()}
-        </p>
-      </div>
-    </li>
-  ))}
-</ul>
-
+      <ul className="custom-list">
+        {activities.map((activity, index) => (
+          <li key={index} className="activity">
+            <div className="icon-wrapper">
+              {iconMap[activity.entity] || <ActivityIcon className="icon" />}
+            </div>
+            <div className="content">
+              <p className="timestamp">
+                {new Date(activity.timestamp).toLocaleString()}
+              </p>
+              <p>
+                <strong>{activity.entity} </strong><strong>{activity.user}</strong> {activity.action.toLowerCase()}{" "}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
