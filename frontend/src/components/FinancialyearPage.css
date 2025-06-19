@@ -1,0 +1,207 @@
+:root {
+  --primary-color: #4b6cb7;
+  --secondary-color: #182848;
+  --accent-color: #28a745;
+  --danger-color: #dc3545;
+  --white: #ffffff;
+  --gray-light: #f9f9f9;
+  --gray-border: #e0e0e0;
+  --text-color: #333;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Page container */
+.financial-page-wrapper {
+  font-family: var(--font-family);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+.dashboard-header {
+  margin-bottom: 1rem;
+}
+
+/* Back button */
+.back-button {
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.back-button:hover {
+  background: #3f5ab5;
+}
+
+/* Heading */
+.fy-heading {
+  font-size: 26px;
+  color: var(--primary-color);
+  font-weight: 600;
+  margin: 1rem 0;
+}
+
+/* Table container */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  margin-top: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Table */
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.employee-table th,
+.employee-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  text-align: left;
+  border-top: 1px solid var(--gray-border);
+  border-bottom: 1px solid var(--gray-border);
+  border-left: none;
+  border-right: none;
+  vertical-align: middle;
+}
+
+
+.employee-table th {
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Zebra striping */
+.employee-table tr:nth-child(even) {
+  background-color: var(--gray-light);
+}
+
+.employee-table tr:hover {
+  background-color: #f1f7ff;
+}
+
+/* Edit input */
+.edit-input {
+  width: 100px;
+  padding: 6px 8px;
+  border: 1px solid var(--gray-border);
+  border-radius: 4px;
+  text-align: right;
+  font-size: 14px;
+}
+
+/* Text alignment */
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Muted and highlighted text */
+.muted {
+  color: #aaa;
+  font-style: italic;
+}
+
+.highlight {
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.action-buttons button {
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.edit-btn:hover {
+  background: #3f5ab5;
+}
+
+.save-btn {
+  background: var(--accent-color);
+  color: var(--white);
+}
+
+.save-btn:hover {
+  background: #218838;
+}
+
+.cancel-btn {
+  background: var(--danger-color);
+  color: var(--white);
+}
+
+.cancel-btn:hover {
+  background: #c82333;
+}
+
+/* Summary */
+.summary {
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--secondary-color);
+  text-align: right;
+}
+
+/* Empty state */
+.no-data {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}
+
+/* Error state */
+.error-container {
+  padding: 2rem;
+  color: var(--danger-color);
+  text-align: center;
+}
+
+.error-text {
+  margin-top: 1rem;
+  font-size: 16px;
+}
+
+/* Loading */
+.loading {
+  padding: 2rem;
+  font-size: 16px;
+  text-align: center;
+}

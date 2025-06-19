@@ -1,0 +1,232 @@
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Container */
+.assignee-page {
+  position: relative;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.3s ease-out;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.assignee-page h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.close-btn:hover {
+  color: #4b5563;
+}
+
+/* Search Section */
+.search-container {
+  margin-bottom: 20px;
+  position: relative;
+  gap:2.5px
+}
+.search-bar-assign {
+  width: 94.5%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.search-bar-assign:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 10;
+  animation: fadeIn 0.2s ease-out;
+}
+.search-dropdown li {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-dropdown li:hover {
+  background: #f3f4f6;
+}
+
+/* Assign Panel */
+.assign-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.assign-panel span {
+  font-size: 1rem;
+  color: #111827;
+  font-weight: 500;
+}
+
+.assign-panel select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background-color: #fff;
+  transition: border-color 0.2s;
+}
+.assign-panel select:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+/* Floating Field Inputs */
+.floating-field {
+  position: relative;
+  width: 100%;
+}
+
+.floating-field input[type="number"],
+.floating-field input[type="date"] {
+  width: 87%;
+  padding: 14px 16px;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.floating-field input[type="number"]:focus,
+.floating-field input[type="date"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+}
+
+.floating-field label {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  padding: 0 6px;
+  color: #6b7280;
+  font-size: 0.95rem;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.floating-field input:focus + label,
+.floating-field input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 14px;
+  font-size: 0.75rem;
+  color: #3b82f6;
+}
+
+
+/* Button Styles */
+.confirm-btn, .cancel-btn {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+.confirm-btn {
+  background: #3b82f6;
+  color: #fff;
+}
+.confirm-btn:hover {
+  background: #2563eb;
+}
+.cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+.cancel-btn:hover {
+  background: #d1d5db;
+}
+
+/* Assignee Table */
+.assignee-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 28px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.assignee-table th, .assignee-table td {
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #f3f4f6;
+  text-align: left;
+}
+.assignee-table th {
+  background-color: #f9fafb;
+  color: #111827;
+  font-weight: 600;
+}
+.assignee-table tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Remove Button */
+.assignee-table button {
+  padding: 6px 12px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.assignee-table button:hover {
+  background: #dc2626;
+}
+
+.assign-inputs-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  flex-direction: row;
+}

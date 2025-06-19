@@ -1,5 +1,16 @@
 {
   "dependencies": {
-    "axios": "^1.9.0"
-  }
+    "axios": "^1.9.0",
+    "chart.js": "^4.4.9",
+    "gh-pages": "^6.3.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "homepage": "https://niranj-r.github.io/MaxProfit"
 }

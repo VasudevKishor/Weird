@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import DepartmentDirectory from './DeptDirectory';
 import './styles/Dashboard.css';
 import Navbar from './Navbar';
+const API = process.env.REACT_APP_API_BASE_URL;
+
 
 const DeptDashboard = () => {
   const navigate = useNavigate();
